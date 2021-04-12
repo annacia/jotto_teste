@@ -1,6 +1,6 @@
 export function getLetterMatchCount(guessedWord, secretWord) {
-    const secretLetterSet = new Set(secretWord.split(''));
-    const guessedLetterSet = new Set(guessedWord.split(''));
+    const secretLetters = secretWord.split('');
+    const guessedLetterSet = new Set(guessedWord);
 
-    return[...secretLetterSet].filter(letter => guessedLetterSet.has(letter)).length;
+    return secretLetters.filter(letter => guessedLetterSet.has(letter)).length;
 };
