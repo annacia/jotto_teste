@@ -1,14 +1,21 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
 // import {connect} from 'react-redux';
 //
 // import { guessWord } from "./actions";
 
-const Input = (props) => {
+const Input = ({secretWord}) => {
     return (
         <div data-test="component-input">
         </div>
     );
 }
+
+Input.propTypes = {
+    secretWord: PropTypes.string.isRequired
+};
+
 
 export default Input;
 

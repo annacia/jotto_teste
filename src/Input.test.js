@@ -1,11 +1,11 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { findByTestAttr, storeFactory} from "../test/testUtils";
+import { findByTestAttr, storeFactory, checkProps} from "../test/testUtils";
 import Input from "./Input";
 
-const setup = () => {
-    const wrapper = shallow(<Input/>);
+const setup = (secretWord='party') => {
+    const wrapper = shallow(<Input secretWord={secretWord} />);
     return wrapper;
 }
 
@@ -14,6 +14,9 @@ describe('render', () => {
         let wrapper = setup();
         const component = findByTestAttr(wrapper, 'component-input');
         expect(component.length).toBe(1);
+    });
+    test('does not throw warning with expected props', () => {
+        checkProps(Input, {secretWord: 'party'});
     })
 })
 
