@@ -11,17 +11,50 @@ import Input from "./Input";
 //     useState: (initialState) => [initialState, mockSetCurrentGuess]
 // }));
 
-const setup = (secretWord='party') => {
-    const wrapper = shallow(<Input secretWord={secretWord} />);
+const setup = (success=false, secretWord='party') => {
+    const wrapper = shallow(<Input success={success} secretWord={secretWord} />);
     return wrapper;
 }
 
 describe('render', () => {
-    test('renders without error', () => {
-        let wrapper = setup();
-        const component = findByTestAttr(wrapper, 'component-input');
-        expect(component.length).toBe(1);
+    describe('success is true', () => {
+        let wrapper;
+        beforeEach(() => {
+            wrapper = setup(true);
+        });
+        test('renders without error', () => {
+            const component = findByTestAttr(wrapper, 'component-input');
+            expect(component.length).toBe(1);
+        });
+        test('input box does not show', () => {
+            const inputBox = findByTestAttr(wrapper, 'input-box');
+            expect(inputBox.exists()).toBe(false);
+        });
+        test('submit button does not show', () => {
+            const btn = findByTestAttr(wrapper, 'submit-button');
+            expect(btn.exists()).toBe(false);
+        });
     });
+    describe('success is false', () => {
+        let wrapper;
+        beforeEach(() => {
+            wrapper = setup(false);
+        });
+        test('renders without error', () => {
+            const component = findByTestAttr(wrapper, 'component-input');
+            expect(component.length).toBe(1);
+        });
+        test('input box shows', () => {
+            const inputBox = findByTestAttr(wrapper, 'input-box');
+            expect(inputBox.exists()).toBe(true);
+        });
+        test('submit button shows', () => {
+            const btn = findByTestAttr(wrapper, 'submit-button');
+            expect(btn.exists()).toBe(true);
+        });
+    });
+
+
     test('does not throw warning with expected props', () => {
         checkProps(Input, {secretWord: 'party'});
     });
