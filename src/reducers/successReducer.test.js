@@ -10,3 +10,13 @@ test('returns state of true upon receiving an action of type `CORRECT_GUESS`', (
     const newState = successReducer(undefined, {type:actionTypes.CORRECT_GUESS});
     expect(newState).toBe(true);
 });
+
+test('return previous state when unknown action type', () => {
+    const newState = successReducer(false, {type: 'unknown'});
+    expect(newState).toBe(false);
+});
+
+test('return true for action type CORRECT_GUESS', () => {
+    const newState = successReducer(false, {type: actionTypes.CORRECT_GUESS});
+    expect(newState).toBe(true);
+});
