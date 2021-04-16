@@ -23,9 +23,10 @@ export const guessWord = (guessedWord) => {
     };
 };
 
-export function correctGuess() {
-    return { type: actionTypes.CORRECT_GUESS};
-}
+//Tests removed II
+// export function correctGuess() {
+//     return { type: actionTypes.CORRECT_GUESS};
+// }
 
 //Tests removed
 // import { correctGuess, actionTypes } from "./index";
