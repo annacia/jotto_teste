@@ -14,8 +14,7 @@ import Input from "./Input";
 
 const setup = (initialState={}, secretWord='party') => {
     const store = storeFactory(initialState);
-    const wrapper = mount(<Provider store={store}><Input secretWord={secretWord} /></Provider>);
-    return wrapper;
+    return mount(<Provider store={store}><Input secretWord={secretWord} /></Provider>);
 }
 
 describe('render', () => {
@@ -65,18 +64,12 @@ describe('render', () => {
 describe('state controlled input field', () => {
     let mockSetCurrentGuess = jest.fn();
     let wrapper;
-    let originalUseState;
 
     beforeEach(() => {
         mockSetCurrentGuess.mockClear();
-        originalUseState = React.useState;
         React.useState = jest.fn(() => ["", mockSetCurrentGuess]);
         // this function React.useState replaces the function of the component
-        wrapper = setup();
-    });
-
-    afterEach(() => {
-        React.useState = originalUseState;
+        wrapper = setup({ success: false });
     });
 
     test('state updates with value of input box upon change', () => {
@@ -86,14 +79,6 @@ describe('state controlled input field', () => {
         inputBox.simulate('change', mockEvent);
 
         expect(mockSetCurrentGuess).toHaveBeenCalledWith('train');
-    });
-
-    test('input field is cleared when submit btn is clicked', () => {
-        const btn = findByTestAttr(wrapper, 'submit-button');
-
-        btn.simulate("click", {preventDefault(){}});
-
-        expect(mockSetCurrentGuess).toHaveBeenCalledWith("");
     });
 });
 

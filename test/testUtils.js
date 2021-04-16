@@ -6,8 +6,6 @@ import {middlewares} from "../src/configureStore";
 
 export const storeFactory = (initialState) => {
     return createStore(rootReducer, initialState, applyMiddleware(...middlewares));
-    // const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore)
-    // return createStoreWithMiddleware(rootReducer, initialState);
 }
 
 export const findByTestAttr = (wrapper, val) => {

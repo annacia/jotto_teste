@@ -27,7 +27,7 @@ describe('guessWord action dispacher', () => {
             store.dispatch(guessWord(secretWord));
             const newState = store.getState();
             const expectedState = {
-                secretWord,
+                ...initialState,
                 success: true,
                 guessedWords: [{
                     guessedWord: secretWord,
