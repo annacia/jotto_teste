@@ -1,5 +1,6 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import {Provider} from 'react-redux';
 
 import { findByTestAttr, storeFactory, checkProps} from "../test/testUtils";
 import Input from "./Input";
@@ -11,8 +12,9 @@ import Input from "./Input";
 //     useState: (initialState) => [initialState, mockSetCurrentGuess]
 // }));
 
-const setup = (success=false, secretWord='party') => {
-    const wrapper = shallow(<Input success={success} secretWord={secretWord} />);
+const setup = (initialState={}, secretWord='party') => {
+    const store = storeFactory(initialState);
+    const wrapper = mount(<Provider store={store}><Input secretWord={secretWord} /></Provider>);
     return wrapper;
 }
 
@@ -20,7 +22,7 @@ describe('render', () => {
     describe('success is true', () => {
         let wrapper;
         beforeEach(() => {
-            wrapper = setup(true);
+            wrapper = setup({success:true});
         });
         test('renders without error', () => {
             const component = findByTestAttr(wrapper, 'component-input');
@@ -38,7 +40,7 @@ describe('render', () => {
     describe('success is false', () => {
         let wrapper;
         beforeEach(() => {
-            wrapper = setup(false);
+            wrapper = setup({success:false});
         });
         test('renders without error', () => {
             const component = findByTestAttr(wrapper, 'component-input');
