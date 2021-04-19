@@ -16,6 +16,15 @@ const languageStrings = {
         guessedWords: '🤷‍🔤',
         guessColumnHeader: '🤷‍',
         matchingLettersColumnHeader: '✅',
+    },
+    br: {
+        congrats: 'Parabéns! Você descobriu a palavra!',
+        submit: 'Enviar',
+        guessPrompt: 'Tente adivinhar a palavra!',
+        guessInputPlaceholder: 'Digitar',
+        guessedWords: 'Palavras',
+        guessColumnHeader: 'Palpites',
+        matchingLettersColumnHeader: 'Letras em comum',
     }
 }
 
