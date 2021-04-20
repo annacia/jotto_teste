@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { findByTestAttr, checkProps } from '../test/testUtils';
 import languageContext from './contexts/languageContext'
+import successContext from './contexts/successContext'
 
 import Input from './Input';
 
@@ -19,7 +20,9 @@ const setup = ({success, secretWord, language}) => {
 
   return mount(
       <languageContext.Provider value={language}>
-        <Input success={success} secretWord={secretWord} />
+        <successContext.SuccessProvider value={[success, jest.fn()]}>
+          <Input secretWord={secretWord} />
+        </successContext.SuccessProvider>
       </languageContext.Provider>
   );
 }
