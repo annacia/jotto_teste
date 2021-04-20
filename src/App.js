@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 import Congrats from './Congrats';
@@ -22,7 +22,7 @@ const reducer = (state, action) => {
 function App() {
     const [state, dispatch] = React.useReducer(
         reducer,
-        {secretWord: null, language: 'en'}
+        {secretWord: 'party', language: 'en'}
     );
 
   // TODO: get props from shared state
