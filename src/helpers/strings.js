@@ -17,7 +17,7 @@ const languageStrings = {
         guessColumnHeader: '🤷‍',
         matchingLettersColumnHeader: '✅',
     },
-    br: {
+    ptbr: {
         congrats: 'Parabéns! Você descobriu a palavra!',
         submit: 'Enviar',
         guessPrompt: 'Tente adivinhar a palavra!',
