@@ -1,6 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { findByTestAttr, checkProps } from '../test/testUtils';
+import languageContext from './contexts/languageContext'
 
 import Input from './Input';
 
@@ -11,15 +12,41 @@ import Input from './Input';
 //   useState: (initialState) => [initialState, mockSetCurrentGuess]
 // }))
 
-const setup = (success=false, secretWord='party') => {
-  return shallow(<Input success={success} secretWord={secretWord} />);
+const setup = ({success, secretWord, language}) => {
+  success = success || false;
+  secretWord = secretWord || 'party';
+  language = language || 'en';
+
+  return mount(
+      <languageContext.Provider value={language}>
+        <Input success={success} secretWord={secretWord} />
+      </languageContext.Provider>
+  );
 }
+
+describe('languagePicker', () => {
+  test('correctly renders submit string in english', () => {
+    const wrapper = setup({ language: 'en'});
+    const btn = findByTestAttr(wrapper, 'submit-button');
+    expect(btn.text()).toBe('Submit');
+  });
+  test('correctly renders submit string in emoji', () => {
+    const wrapper = setup({language: 'emoji'});
+    const btn = findByTestAttr(wrapper, 'submit-button')
+    expect(btn.text()).toBe('🚀');
+  });
+  test('correctly renders submit string in pt-br', () => {
+    const wrapper = setup({language: 'ptbr'});
+    const btn = findByTestAttr(wrapper, 'submit-button')
+    expect(btn.text()).toBe('Enviar');
+  });
+});
 
 describe('render', () => {
   describe('success is false', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = setup(false);
+      wrapper = setup({success:false});
     })
     test('Input renders without error', () => {
       const inputComponent = findByTestAttr(wrapper, 'component-input');
@@ -37,7 +64,7 @@ describe('render', () => {
   describe('success is true', () => {
     let wrapper;
     beforeEach(() => {
-      wrapper = setup(true);
+      wrapper = setup({success:true});
     })
     test('Input renders without error', () => {
       const inputComponent = findByTestAttr(wrapper, 'component-input');
@@ -67,7 +94,7 @@ describe('state controlled input field', () => {
     mockSetCurrentGuess.mockClear();
     originalUseState = React.useState;
     React.useState = () => ["", mockSetCurrentGuess];
-    wrapper = setup();
+    wrapper = setup({});
   });
   afterEach(() => {
     React.useState = originalUseState;
