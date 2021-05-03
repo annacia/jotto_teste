@@ -7,6 +7,8 @@ const languageStrings = {
         guessColumnHeader: 'Guessed Words',
         guessedWords: 'Guesses',
         matchingLettersColumnHeader: 'Matching Letters',
+        guessNumberHeader: 'Guess Number',
+        numberOfGuesses: 'Total Guesses: '
     },
     emoji: {
         congrats: '🎯🎉',
@@ -16,6 +18,8 @@ const languageStrings = {
         guessedWords: '🤷‍🔤',
         guessColumnHeader: '🤷‍',
         matchingLettersColumnHeader: '✅',
+        guessNumberHeader: '🆔',
+        numberOfGuesses: '🔠 '
     },
     ptbr: {
         congrats: 'Parabéns! Você descobriu a palavra!',
@@ -25,6 +29,8 @@ const languageStrings = {
         guessedWords: 'Palavras',
         guessColumnHeader: 'Palpites',
         matchingLettersColumnHeader: 'Letras em comum',
+        guessNumberHeader: 'Número Palpite',
+        numberOfGuesses: 'Total Palpites: '
     }
 }
 

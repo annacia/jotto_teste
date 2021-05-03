@@ -29,8 +29,8 @@ function App() {
     );
 
   // TODO: get props from shared state
-  const success = false;
-  const guessedWords = [];
+  // const success = false;
+  // const guessedWords = [];
 
   const setSecretWord = (secretWord) => {
       dispatch({type: 'setSecretWord', payload: secretWord});
