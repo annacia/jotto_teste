@@ -4,7 +4,7 @@ import './App.css';
 import Congrats from './Congrats';
 import GuessedWords from './GuessedWords';
 import Input from './Input';
-import { getSecretWord } from './actions';
+import { getSecretWord } from './actions/hookActions';
 import LanguagePicker from './LanguagePicker';
 import languageContext from './contexts/languageContext';
 import successContext from './contexts/successContext';

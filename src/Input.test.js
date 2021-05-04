@@ -7,6 +7,7 @@ import guessedWordsContext from './contexts/guessedWordsContext';
 
 
 import Input from './Input';
+import hookActions from "./actions/hookActions";
 
 // mock entire module for destructuring useState on import //////
 // const mockSetCurrentGuess = jest.fn();
@@ -15,16 +16,19 @@ import Input from './Input';
 //   useState: (initialState) => [initialState, mockSetCurrentGuess]
 // }))
 
-const setup = ({success, secretWord, language}) => {
+const mockSetSuccess = jest.fn();
+
+const setup = ({success, secretWord, setSecretWord, language}) => {
   success = success || false;
   secretWord = secretWord || 'party';
+  setSecretWord = setSecretWord || function () {};
   language = language || 'en';
 
   return mount(
       <languageContext.Provider value={language}>
-        <successContext.SuccessProvider value={[success, jest.fn()]}>
+        <successContext.SuccessProvider value={[success, mockSetSuccess]}>
           <guessedWordsContext.GuessedWordsProvider>
-            <Input secretWord={secretWord} />
+            <Input secretWord={secretWord} setSecretWord={setSecretWord} />
           </guessedWordsContext.GuessedWordsProvider>
         </successContext.SuccessProvider>
       </languageContext.Provider>
@@ -67,6 +71,10 @@ describe('render', () => {
       const submitButton = findByTestAttr(wrapper, 'submit-button');
       expect(submitButton.exists()).toBe(true);
     });
+    test('do not render reset btn', () => {
+      const resetBtn = findByTestAttr(wrapper, 'render-button');
+      expect(resetBtn.exists()).toBe(false);
+    })
   });
   describe('success is true', () => {
     let wrapper;
@@ -84,6 +92,10 @@ describe('render', () => {
     test('submit button does not display', () => {
       const submitButton = findByTestAttr(wrapper, 'submit-button');
       expect(submitButton.exists()).toBe(false);
+    });
+    test('show btn to reset game after successful guess', () => {
+      const resetBtn = findByTestAttr(wrapper, 'reset-button');
+      expect(resetBtn.exists()).toBe(true);
     });
   });
 });
@@ -120,4 +132,19 @@ describe('state controlled input field', () => {
     inputBox.simulate("change", mockEvent);
     expect(mockSetCurrentGuess).toHaveBeenCalledWith('train');
   });
-})
+});
+
+test('Reset Game on click reset button', () => {
+  const mockGetSecretWord = jest.fn();
+  hookActions.getSecretWord = mockGetSecretWord;
+
+  const wrapper = setup({
+    success: true,
+    secretWord: 'party',
+    setSecretWord: jest.fn()
+  });
+  const resetBtn = findByTestAttr(wrapper, 'reset-button');
+  resetBtn.simulate('click', { preventDefault() {} });
+  expect(mockGetSecretWord).toHaveBeenCalledTimes(1);
+  expect(mockSetSuccess).toHaveBeenCalledWith(false);
+});

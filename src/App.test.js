@@ -4,8 +4,8 @@ import { findByTestAttr } from '../test/testUtils';
 import App from './App';
 
 // activate global mock to make sure getSecretWord doesn't make network call
-jest.mock('./actions');
-import { getSecretWord as mockGetSecretWord } from './actions';
+import {getSecretWord as mockGetSecretWord} from "./actions/hookActions";
+jest.mock('./actions/hookActions');
 
 /**
  * Setup function for App component

@@ -15,7 +15,6 @@ const GuessedWords = () => {
       </span>
     );
   } else {
-      console.log(guessedWords.length);
     const guessedWordsRows = guessedWords.map((word, index) => (
       <tr data-test="guessed-word" key={ index }>
             <td>{index+1}</td>

@@ -7,15 +7,31 @@ import languageContext from './contexts/languageContext';
 import stringsModule from './helpers/strings';
 
 import {getLetterMatchCount} from './helpers';
-
-function Input({ secretWord }) {
+import hookActions from './actions/hookActions';
+function Input({ secretWord, setSecretWord }) {
     const language = React.useContext(languageContext);
     const [success, setSuccess] = successContext.useSuccess();
     const [guessedWords, setGuessedWords] = guessedWordsContext.useGuessedWords();
     const [currentGuess, setCurrentGuess] = React.useState("");
 
+    const resetGame = (setSecretWord) => {
+        hookActions.getSecretWord(setSecretWord);
+        setGuessedWords([]);
+        setSuccess(false);
+    }
+
     if (success) {
-        return <div data-test='component-input' />
+        return (
+            <div data-test='component-input'>
+                <button
+                    data-test="reset-button"
+                    className="btn btn-primary mb-2"
+                    onClick={() => resetGame(setSecretWord)}
+                >
+                    Reset
+                </button>
+            </div>
+        )
     }
 
     return (
