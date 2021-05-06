@@ -18,10 +18,10 @@ const setup = () => {
 }
 
 describe.each([
-    [null, true, false],
-    ['party', false, true]
+    [null, true, false, false],
+    ['party', false, true, false]
 ])(
-    'renders with secretWord as %s', (secretWord, loadingShows, appShows) => {
+    'renders with secretWord as %s', (secretWord, loadingShows, appShows, giveUp) => {
       let wrapper;
       let originalUseReducer;
 
@@ -30,7 +30,7 @@ describe.each([
 
         const mockUseReducer = jest.fn()
             .mockReturnValue([
-              {secretWord, language: 'en'},
+              {secretWord, language: 'en', giveUp},
                 jest.fn(),
             ]);
         React.useReducer = mockUseReducer;
@@ -70,4 +70,31 @@ describe('get secret word', () => {
 
     expect(mockGetSecretWord).toHaveBeenCalledTimes(0);
   });
+});
+
+describe('user give up', () => {
+    test('dont render text when giveup state is false', () => {
+        const mockUseReducer = jest.fn()
+            .mockReturnValue([
+                {secretWord: 'party', language: 'en', giveUp: false},
+                jest.fn(),
+            ]);
+        React.useReducer = mockUseReducer;
+
+        let wrapper = setup();
+        let textGiveUp = findByTestAttr(wrapper, "text-secret-word");
+        expect(textGiveUp.exists()).toBe(false);
+    });
+    test('render text when giveup state is true', () => {
+        const mockUseReducer = jest.fn()
+            .mockReturnValue([
+                {secretWord: 'party', language: 'en', giveUp: true},
+                jest.fn(),
+        ]);
+        React.useReducer = mockUseReducer;
+
+        let wrapper = setup();
+        let textGiveUp = findByTestAttr(wrapper, "text-secret-word");
+        expect(textGiveUp.exists()).toBe(true);
+    });
 });

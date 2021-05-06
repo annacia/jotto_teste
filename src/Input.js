@@ -8,7 +8,7 @@ import stringsModule from './helpers/strings';
 
 import {getLetterMatchCount} from './helpers';
 import hookActions from './actions/hookActions';
-function Input({ secretWord, setSecretWord }) {
+function Input({ secretWord, setSecretWord, setGiveUp }) {
     const language = React.useContext(languageContext);
     const [success, setSuccess] = successContext.useSuccess();
     const [guessedWords, setGuessedWords] = guessedWordsContext.useGuessedWords();
@@ -18,6 +18,7 @@ function Input({ secretWord, setSecretWord }) {
         hookActions.getSecretWord(setSecretWord);
         setGuessedWords([]);
         setSuccess(false);
+        setGiveUp(false);
     }
 
     if (success) {

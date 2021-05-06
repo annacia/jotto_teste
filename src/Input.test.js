@@ -17,18 +17,20 @@ import hookActions from "./actions/hookActions";
 // }))
 
 const mockSetSuccess = jest.fn();
+const mockSetGiveUp = jest.fn();
 
-const setup = ({success, secretWord, setSecretWord, language}) => {
+const setup = ({success, secretWord, setSecretWord, language, setGiveUp}) => {
   success = success || false;
   secretWord = secretWord || 'party';
   setSecretWord = setSecretWord || function () {};
   language = language || 'en';
+  setGiveUp = setGiveUp || function () {};
 
   return mount(
       <languageContext.Provider value={language}>
         <successContext.SuccessProvider value={[success, mockSetSuccess]}>
           <guessedWordsContext.GuessedWordsProvider>
-            <Input secretWord={secretWord} setSecretWord={setSecretWord} />
+            <Input secretWord={secretWord} setSecretWord={setSecretWord} setGiveUp={mockSetGiveUp} />
           </guessedWordsContext.GuessedWordsProvider>
         </successContext.SuccessProvider>
       </languageContext.Provider>
@@ -141,10 +143,12 @@ test('Reset Game on click reset button', () => {
   const wrapper = setup({
     success: true,
     secretWord: 'party',
-    setSecretWord: jest.fn()
+    setSecretWord: jest.fn(),
+    setGiveUp: jest.fn()
   });
   const resetBtn = findByTestAttr(wrapper, 'reset-button');
   resetBtn.simulate('click', { preventDefault() {} });
   expect(mockGetSecretWord).toHaveBeenCalledTimes(1);
   expect(mockSetSuccess).toHaveBeenCalledWith(false);
+  expect(mockSetGiveUp).toHaveBeenCalledWith(false);
 });

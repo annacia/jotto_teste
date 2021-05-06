@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './App.css';
+import hookActions from './actions/hookActions';
 
 import Congrats from './Congrats';
 import GuessedWords from './GuessedWords';
@@ -9,6 +10,7 @@ import LanguagePicker from './LanguagePicker';
 import languageContext from './contexts/languageContext';
 import successContext from './contexts/successContext';
 import guessedWordsContext from './contexts/guessedWordsContext';
+import GiveUpButton from "./GiveUpButton";
 
 
 const reducer = (state, action) => {
@@ -17,6 +19,8 @@ const reducer = (state, action) => {
             return {...state, secretWord: action.payload}
         case 'setLanguage':
             return {...state, language: action.payload}
+        case "setGiveUp":
+            return { ...state, giveUp: action.payload }
         default:
             throw new Error('Invalid action type: '+ action.type);
     }
@@ -25,7 +29,7 @@ const reducer = (state, action) => {
 function App() {
     const [state, dispatch] = React.useReducer(
         reducer,
-        {secretWord: 'party', language: 'en'}
+        {secretWord: 'party', language: 'en', giveUp: false}
     );
 
   // TODO: get props from shared state
@@ -38,6 +42,10 @@ function App() {
 
   const setLanguage = (language) => {
       dispatch({type: 'setLanguage', payload: language })
+  }
+
+  const setGiveUp = (giveUp) => {
+      dispatch({type: 'setGiveUp', payload: giveUp })
   }
 
   useEffect(() => {
@@ -62,8 +70,10 @@ function App() {
             <LanguagePicker setLanguage={setLanguage} />
             <guessedWordsContext.GuessedWordsProvider>
                 <successContext.SuccessProvider>
-                    <Congrats />
-                    <Input secretWord={state.secretWord} />
+                    {state.giveUp && <p data-test="text-secret-word">The secret word was: {state.secretWord}</p>}
+                    {!state.giveUp && <Congrats/>}
+                    <GiveUpButton setGiveUp={setGiveUp} giveUp={state.giveUp}/>
+                    <Input secretWord={state.secretWord} setGiveUp={setGiveUp}/>
                 </successContext.SuccessProvider>
                 <GuessedWords/>
             </guessedWordsContext.GuessedWordsProvider>
