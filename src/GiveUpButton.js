@@ -15,6 +15,12 @@ const GiveUpButton = ({setGiveUp, giveUp}) => {
         );
     }
 
+    if (success && !giveUp) {
+        return(
+            <div data-test="component-giveup-button"/>
+        );
+    }
+
     return(
         <div data-test="component-giveup-button">
             <button

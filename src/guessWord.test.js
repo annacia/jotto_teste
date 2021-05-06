@@ -19,14 +19,20 @@ import GuessedWords from './GuessedWords';
  * @param {object} state - Initial conditions.
  * @returns {Wrapper} - Enzyme wrapper of mounted App component
  */
-const setup = ({secretWord, guessedWords}) => {
+const setup = ({secretWord, guessedWords, setSecretWord, setGiveUp, setManualSecretWord}) => {
+    setSecretWord = setSecretWord || function () {};
+    setGiveUp = setGiveUp || function () {};
+    setManualSecretWord = setManualSecretWord || function () {};
 
   // TODO: apply state
   const wrapper = mount(
       <guessedWordsContext.GuessedWordsProvider>
           <successContext.SuccessProvider>
               <Congrats/>
-              <Input secretWord={secretWord}/>
+              <Input secretWord={secretWord}
+                     setSecretWord={setSecretWord}
+                     setGiveUp={setGiveUp}
+                     setManualSecretWord={setManualSecretWord}/>
               <GuessedWords/>
           </successContext.SuccessProvider>
       </guessedWordsContext.GuessedWordsProvider>

@@ -18,19 +18,26 @@ import hookActions from "./actions/hookActions";
 
 const mockSetSuccess = jest.fn();
 const mockSetGiveUp = jest.fn();
+const mockSetManualSecretWord = jest.fn();
 
-const setup = ({success, secretWord, setSecretWord, language, setGiveUp}) => {
+
+
+const setup = ({success, secretWord, setSecretWord, language, setGiveUp, setManualSecretWord}) => {
   success = success || false;
   secretWord = secretWord || 'party';
   setSecretWord = setSecretWord || function () {};
   language = language || 'en';
-  setGiveUp = setGiveUp || function () {};
 
   return mount(
       <languageContext.Provider value={language}>
         <successContext.SuccessProvider value={[success, mockSetSuccess]}>
           <guessedWordsContext.GuessedWordsProvider>
-            <Input secretWord={secretWord} setSecretWord={setSecretWord} setGiveUp={mockSetGiveUp} />
+            <Input
+                secretWord={secretWord}
+                setSecretWord={setSecretWord}
+                setGiveUp={mockSetGiveUp}
+                setManualSecretWord={mockSetManualSecretWord}
+            />
           </guessedWordsContext.GuessedWordsProvider>
         </successContext.SuccessProvider>
       </languageContext.Provider>
@@ -151,4 +158,5 @@ test('Reset Game on click reset button', () => {
   expect(mockGetSecretWord).toHaveBeenCalledTimes(1);
   expect(mockSetSuccess).toHaveBeenCalledWith(false);
   expect(mockSetGiveUp).toHaveBeenCalledWith(false);
+  expect(mockSetManualSecretWord).toHaveBeenCalledWith(true);
 });

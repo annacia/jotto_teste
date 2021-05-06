@@ -11,6 +11,7 @@ import languageContext from './contexts/languageContext';
 import successContext from './contexts/successContext';
 import guessedWordsContext from './contexts/guessedWordsContext';
 import GiveUpButton from "./GiveUpButton";
+import ManualSecretWord from "./ManualSecretWord";
 
 
 const reducer = (state, action) => {
@@ -21,6 +22,8 @@ const reducer = (state, action) => {
             return {...state, language: action.payload}
         case "setGiveUp":
             return { ...state, giveUp: action.payload }
+        case "setManualSecretWord":
+            return { ...state, manualSecretWord: action.payload }
         default:
             throw new Error('Invalid action type: '+ action.type);
     }
@@ -29,28 +32,39 @@ const reducer = (state, action) => {
 function App() {
     const [state, dispatch] = React.useReducer(
         reducer,
-        {secretWord: 'party', language: 'en', giveUp: false}
+        {
+            secretWord: '',
+            language: 'en',
+            giveUp: false,
+            manualSecretWord: true
+        }
     );
 
-  // TODO: get props from shared state
-  // const success = false;
-  // const guessedWords = [];
+    // TODO: get props from shared state
+    // const success = false;
+    // const guessedWords = [];
 
-  const setSecretWord = (secretWord) => {
+    const setSecretWord = (secretWord) => {
       dispatch({type: 'setSecretWord', payload: secretWord});
-  }
+    }
 
-  const setLanguage = (language) => {
+    const setLanguage = (language) => {
       dispatch({type: 'setLanguage', payload: language })
-  }
+    }
 
-  const setGiveUp = (giveUp) => {
+    const setGiveUp = (giveUp) => {
       dispatch({type: 'setGiveUp', payload: giveUp })
-  }
+    }
 
-  useEffect(() => {
-    getSecretWord(setSecretWord);
-  }, [])
+    const setManualSecretWord = (manualSecretWord) => {
+        dispatch({type: 'setManualSecretWord', payload: manualSecretWord })
+    }
+
+    useEffect(() => {
+        if(!state.manualSecretWord) {
+            getSecretWord(setSecretWord);
+        }
+    }, [state.manualSecretWord])
 
     if (state.secretWord === null) {
         return (
@@ -63,6 +77,31 @@ function App() {
         )
     }
 
+    const Game = () => {
+        if (state.manualSecretWord && !state.secretWord) {
+            return(
+                <ManualSecretWord
+                    setSecretWord={setSecretWord}
+                    setManualSecretWord={setManualSecretWord}
+                />
+            );
+        }
+
+        return (
+            <>
+            {state.giveUp && <p data-test="text-secret-word">The secret word was: {state.secretWord}</p>}
+            {!state.giveUp && <Congrats/>}
+            <GiveUpButton setGiveUp={setGiveUp} giveUp={state.giveUp}/>
+            <Input
+                secretWord={state.secretWord}
+                setGiveUp={setGiveUp}
+                setSecretWord={setSecretWord}
+                setManualSecretWord={setManualSecretWord}
+            />
+            </>
+        );
+    }
+
   return (
     <div data-test="component-app" className="container">
       <h1>Jotto</h1>
@@ -70,10 +109,7 @@ function App() {
             <LanguagePicker setLanguage={setLanguage} />
             <guessedWordsContext.GuessedWordsProvider>
                 <successContext.SuccessProvider>
-                    {state.giveUp && <p data-test="text-secret-word">The secret word was: {state.secretWord}</p>}
-                    {!state.giveUp && <Congrats/>}
-                    <GiveUpButton setGiveUp={setGiveUp} giveUp={state.giveUp}/>
-                    <Input secretWord={state.secretWord} setGiveUp={setGiveUp}/>
+                    <Game/>
                 </successContext.SuccessProvider>
                 <GuessedWords/>
             </guessedWordsContext.GuessedWordsProvider>

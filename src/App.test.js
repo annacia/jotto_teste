@@ -52,9 +52,16 @@ describe.each([
 )
 
 describe('get secret word', () => {
-  beforeEach(() => {
+    let mockUseReducer;
+    beforeEach(() => {
     // clear the mock calls from previous tests
     mockGetSecretWord.mockClear();
+    mockUseReducer = jest.fn()
+          .mockReturnValue([
+              {secretWord: 'party', language: 'en', giveUp: false, manualSecretWord: false},
+              jest.fn()
+          ]);
+      React.useReducer = mockUseReducer;
   })
   test('getSecretWord on app mount', () => {
     const wrapper = setup();
@@ -97,4 +104,30 @@ describe('user give up', () => {
         let textGiveUp = findByTestAttr(wrapper, "text-secret-word");
         expect(textGiveUp.exists()).toBe(true);
     });
+});
+
+test('shows ManualSecretWordInput component when secretWord is empty', () => {
+   const mockUseReducer = jest.fn()
+       .mockReturnValue([
+           {secretWord: '', language: 'en', giveUp: false, manualSecretWord: true},
+           jest.fn()
+       ]);
+   React.useReducer = mockUseReducer;
+
+    let wrapper = setup();
+    let manualSecretWordInput = findByTestAttr(wrapper, "component-manual-secret-word");
+    expect(manualSecretWordInput.exists()).toBe(true);
+});
+
+test('dont shows ManualSecretWordInput component when secretWord is filled', () => {
+    const mockUseReducer = jest.fn()
+        .mockReturnValue([
+            {secretWord: 'party', language: 'en', giveUp: false, manualSecretWord: true},
+            jest.fn()
+        ]);
+    React.useReducer = mockUseReducer;
+
+    let wrapper = setup();
+    let manualSecretWordInput = findByTestAttr(wrapper, "component-manual-secret-word");
+    expect(manualSecretWordInput.exists()).toBe(false);
 });
