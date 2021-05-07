@@ -24,6 +24,8 @@ const reducer = (state, action) => {
             return { ...state, giveUp: action.payload }
         case "setManualSecretWord":
             return { ...state, manualSecretWord: action.payload }
+        case "setServerError":
+            return { ...state, serverError: action.payload }
         default:
             throw new Error('Invalid action type: '+ action.type);
     }
@@ -36,7 +38,8 @@ function App() {
             secretWord: '',
             language: 'en',
             giveUp: false,
-            manualSecretWord: true
+            manualSecretWord: true,
+            serverError: false
         }
     );
 
@@ -60,9 +63,13 @@ function App() {
         dispatch({type: 'setManualSecretWord', payload: manualSecretWord })
     }
 
+    const setServerError = (serverError) => {
+        dispatch({type: 'setServerError', payload: serverError })
+    }
+
     useEffect(() => {
         if(!state.manualSecretWord) {
-            getSecretWord(setSecretWord);
+            getSecretWord(setSecretWord, setServerError);
         }
     }, [state.manualSecretWord])
 
